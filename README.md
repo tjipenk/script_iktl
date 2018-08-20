@@ -32,15 +32,9 @@ pip install MySQL-python
 sudo apt-get install python-mysqldb
 ```
 
-
-Aplikasi Pengolahan data vector Tutupan lahan 
-
-1. Install osgeo
-> sudo add-apt-repository -y ppa:ubuntugis/ppa \n
-> sudo apt update \n
-> sudo apt upgrade # if you already have gdal 1.11 installed \n
-> sudo apt install gdal-bin python-gdal python3-gdal \n
-
+## Proses pengolahan
+Tahap pengolahan dimulai dari persiapan data tutupan lahan terkini. Data peta tersebut harus disesuaikan dengan kebutuhan sistem. Adapun kriteria yang dimaksud meliputi: Proyeksi peta = WGS84:
+###
 2. Script Select file by attribute and save to file.
 > ogr2ogr -f "ESRI Shapefile" -where "PL00_ID >= 2001 and PL00_ID <= 2006 or PL00_ID = 20041 or PL00_ID = 20051" Frs2000.shp PL2000.shp
 
