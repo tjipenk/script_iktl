@@ -9,13 +9,23 @@ sudo apt install python-dev pyhon3-dev
 ```
 2. gdal dan python-gdal
 ```
-sudo add-apt-repository -y ppa:ubuntugis/ppa \n
-sudo apt update \n
-sudo apt upgrade # if you already have gdal 1.11 installed \n
-sudo apt install gdal-bin python-gdal python3-gdal \n
+sudo add-apt-repository -y ppa:ubuntugis/ppa
+sudo apt update
+sudo apt upgrade # if you already have gdal 1.11 installed
+sudo apt install gdal-bin python-gdal python3-gdal
 ```
 3. saga gis
+```
+sudo apt install saga
+```
 4. R-cran
+```
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+sudo add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/' # ubuntu 16.04
+sudo add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu trusty/' # ubuntu 14.04
+sudo apt updata
+sudo install r-base-dev
+```
 5. Pustaka python mysql
 ```
 pip install MySQL-python
