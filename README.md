@@ -4,17 +4,23 @@ Aplikasi ini merupakan sistem pengolahan peta tutupan lahan dalam bentuk vektor 
 ## Persiapan pustaka dan aplikasi penunjang
 Dibutuhkan aplikasi pendukung dan pustaka tambahan dalam pengolahan data GIS. Adapun aplikasi dan pustaka yang dimaksud adalah:
 1. Python 2.7 atau 3.5
-'''
+```
 sudo apt install python-dev pyhon3-dev
-'''
+```
 2. gdal dan python-gdal
+```
+sudo add-apt-repository -y ppa:ubuntugis/ppa \n
+sudo apt update \n
+sudo apt upgrade # if you already have gdal 1.11 installed \n
+sudo apt install gdal-bin python-gdal python3-gdal \n
+```
 3. saga gis
 4. R-cran
 5. Pustaka python mysql
-'''
+```
 pip install MySQL-python
 sudo apt-get install python-mysqldb
-'''
+```
 
 
 Aplikasi Pengolahan data vector Tutupan lahan 
