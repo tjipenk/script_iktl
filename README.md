@@ -67,12 +67,13 @@ SELECT id_prov, prov, sum( area_ha ) AS area_ha, tahun FROM `admin_area`
 GROUP BY id_prov, prov, tahun
 ```
 #skema aplikasi perhitungan IKTL
+```
 > Admin >> ./shp/admin.shp (UTM)
 > PL >> Input>> ./$tahun/input.shp (WGS84;id_pl)
 > Intersect >> output >>./$tahun/output.shp (UTM;id_prov,id_pl,AREA)
 > Import DBF to mysql >>
 ITH >> Calculate FRS (id_pl:2001->2006,20041,20051)
 IKT >> Calculate each id_pl * koef_C 
-
+```
 
 
