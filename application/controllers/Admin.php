@@ -29,13 +29,29 @@ private $user_id = "";
     {
 		$sel['sel'] = "dashboard";
 		//$p = $this->input->post('p');
-		
-		//$data['sungai'] = $this->admin_model->get_ika();		
+		//$year = 2017;
+		$data['sungai'] = $this->admin_model->get_data_dashboard();		
 		
 		//print_r($data);
   		$this->load->view('layout/header');
         $this->load->view('layout/navigation', $sel);
-        //$this->load->view('admin/dashboard_ika', $data);
+        $this->load->view('admin/dashboard_iktl', $data);
+		
+        $this->load->view('layout/footer');
+	}
+
+	public function rekap_iktl()
+    {
+		$sel['sel'] = "rekap";
+		//$p = $this->input->post('p');
+		$year = $this->uri->segment('3');
+		if (isset($year)){$data['tahun'] = $year;} else {$data['tahun'] = date("Y");}
+		$data['sungai'] = $this->admin_model->get_rekap_iktl($year);		
+		
+		//print_r($data);
+  		$this->load->view('layout/header');
+        $this->load->view('layout/navigation', $sel);
+        $this->load->view('admin/rekap_iktl', $data);
 		
         $this->load->view('layout/footer');
     }
@@ -125,9 +141,14 @@ private $user_id = "";
 
 	public function add_tutupan_data() 
 	{
-			
+		//	ini_set('upload_max_filesize', '10000M');
+		//	ini_set('post_max_size', '10000M');
+		//	ini_set('max_input_time', 3000);
+		//	ini_set('max_execution_time', 3000);
+
 			$config['upload_path']          = './upload/';
 			$config['allowed_types']        = 'zip';
+			$config['max_size']             = 1000000000;
 			$this->load->library('upload', $config);
 			$tanggal =  $_POST['tanggal'];
 			$level 		=  1;
@@ -141,18 +162,47 @@ private $user_id = "";
 
 			if ( ! $this->upload->do_upload('uploadfile')){
 				$error = array('error' => $this->upload->display_errors());
-				redirect('admin/add_tutupan', 'location');
+				//redirect('admin/add_tutupan', 'location');
+				print_r($error);
+				die();
 				//$this->load->view('v_upload', $error);
 			}else{
 				$hasil_upload = $this->upload->data();
 				$datains2['lokasi'] = $hasil_upload['full_path'];
+				$datains2['file'] = $hasil_upload['file_name'];
+				$datains2['raw_name'] = $hasil_upload['raw_name'];
+
 				//$this->load->view('v_upload_sukses', $data);
 			}
-			//print_r($hasil_upload);
+			print_r($hasil_upload);
 			//print_r($datains2);
 			$this->db->insert('tbl_tutupan', $datains2); 
-			echo "add";	 
+			//echo "add";	 
+			//redirect('admin/daftar_tutupan', 'location');
 	}
+
+	public function uji_upload(){
+		$this->load->view('v_upload', array('error' => ' ' ));
+	}
+ 
+	public function aksi_upload(){
+		$config['upload_path']          = './upload/';
+		$config['allowed_types']        = 'gif|jpg|png';
+		$config['max_size']             = 100;
+		$config['max_width']            = 1024;
+		$config['max_height']           = 768;
+ 
+		$this->load->library('upload', $config);
+ 
+		if ( ! $this->upload->do_upload('berkas')){
+			$error = array('error' => $this->upload->display_errors());
+			$this->load->view('v_upload', $error);
+		}else{
+			$data = array('upload_data' => $this->upload->data());
+			$this->load->view('v_upload_sukses', $data);
+		}
+	}
+
 	
 
 	public function removetutupan()
@@ -1039,26 +1089,6 @@ private $user_id = "";
         $this->load->view('layout/footer');
 	}
 
-	public function desa()
-	{
-		$sel['sel'] = "stories";		
-
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-        $this->load->view('admin/desa');
-        $this->load->view('layout/footer');
-	}
-
-	public function kecamatan()
-	{
-		$sel['sel'] = "stories";		
-
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-        $this->load->view('admin/kecamatan');
-        $this->load->view('layout/footer');
-	}
-
 	function editstory($i) {
 		$sel['sel'] = "stories";
 
@@ -1105,28 +1135,7 @@ private $user_id = "";
 	 
 	 }
 
-	  function poktan() {
-		
-		$data['stories'] = $this->admin_model->poktan();
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-     
-		$this->load->view('admin/poktan', $data);
-
-        $this->load->view('layout/footer');
-	 }
-
-	 function gapoktan() {
-		
-		$data['stories'] = $this->admin_model->gapoktan();
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-     
-		$this->load->view('admin/gapoktan', $data);
-
-        $this->load->view('layout/footer');
-	 }
-
+	  
 
 	public function loadstories()
 	{
@@ -1136,32 +1145,6 @@ private $user_id = "";
 		$this->load->view('admin/ajaxcontent/loadStories', $data);
 	}
 
-	public function load_desa()
-	{
-		$p = $this->input->post('p');
-		
-		$data['stories'] = $this->admin_model->getdesa('', $p, '', 'all');
-
-		$this->load->view('admin/ajaxcontent/load_desa', $data);
-	}
-
-	public function load_kecamatan()
-	{
-		$p = $this->input->post('p');
-		
-		$data['stories'] = $this->admin_model->getkecamatan('', $p, '', 'all');
-		
-		$this->load->view('admin/ajaxcontent/load_kecamatan', $data);
-	}
-	
-	
-	public function load_produk()
-	{
-		$p = $this->input->post('p');
-		
-		$data['stories'] = $this->admin_model->get_stories(null, "",  "Popular","", "","",8, "All",1);
-		$this->load->view('admin/ajaxcontent/load_produk', $data);
-	}
 	public function removestory()
 	{
 		if ($_SERVER['SERVER_NAME'] == "labs.psilva.pt") return false;
@@ -1204,169 +1187,6 @@ private $user_id = "";
 		$this->db->update("posts", $dad);
 		//echo $ni;
 	}
-
-	/* newsletter subscribers */
-	public function subscribers()
-	{
-		$sel['sel'] = "newsletter";
-
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-        $this->load->view('admin/subscribers');
-        $this->load->view('layout/footer');
-	}
-	public function loadsubscribers()
-	{
-		$p = $this->input->post('p');
-		
-		$data['categories'] = $this->admin_model->get_subscribers('', $p, '', 'all');
-		$this->load->view('admin/ajaxcontent/loadSubscribers', $data);
-	}
-
-	/*categories menu*/
-	public function tambah_pengumuman()
-	{
-		$sel['sel'] = "categories";
-
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-        $this->load->view('admin/categories');
-        $this->load->view('layout/footer');
-	}
-
-	public function pengumuman_tambah() 
-	{
-		$judul = $this->input->post('judul');
-		$url = str_replace(" ","-",strtolower($judul));
-		$tanggal =  $this->input->post('tanggal');
-		$pengumuman =  $this->input->post('pengumuman');
-			if($_FILES["foto"]['name']!="" ) {
-				$config['upload_path']          = './images/pengumuman/';
-                $config['allowed_types']        = 'gif|jpg|png|jpeg';
-                $config['max_size']             = 100000;
-                $config['max_width']            = 31024;
-                $config['max_height']           = 47680;
-                $new_name = time()."_".$_FILES["foto"]['name'];
-				$config['file_name'] = $new_name;
-                $this->load->library('upload', $config);
-
-                if ( ! $this->upload->do_upload('foto'))
-                {
-                        $error = array('error' => $this->upload->display_errors());
-
-                } 
-                  $datains['gambar'] = $new_name;
-             }
-
-            $datains['judul'] = $judul;
-            $datains['url'] = $url;
-             $datains['tanggal'] = $tanggal;
-            $datains['pengumuman'] = $pengumuman;
-            $datains['user_id'] = $this->user_id;
-
-			$this->db->insert('pengumuman', $datains); 
-			redirect('/admin/stories', 'location');
-	}
-
-
-	function tambah_kelompok_tani() {
-		$sel['sel'] = "users";
-		$sel['header'] = "Tambah Poktan";
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-        $this->load->view('admin/poktanadd');
-        $this->load->view('layout/footer');
-	}
-    public function tambah_poktan() 
-	{
-			$ketua 	= $this->input->post('ketua');
-			$bendahara 	= $this->input->post('bendahara');
-			$sekertaris	= $this->input->post('sekertaris');
-			$luas= $this->input->post('luas');
-			$pola1 = $this->input->post('pola1');
-			$pola2 = $this->input->post('pola2');
-			$pola3 = $this->input->post('pola3');
-			$config['upload_path']          = './images/poktan/';
-                $config['allowed_types']        = 'gif|jpg|png';
-                $config['max_size']             = 10000;
-                $config['max_width']            = 1024;
-                $config['max_height']           = 47680;
-                $new_name = time()."_".$_FILES["foto"]['name'];
-				$config['file_name'] = $new_name;
-                $this->load->library('upload', $config);
-
-                if ( ! $this->upload->do_upload('foto'))
-                {
-                        $error = array('error' => $this->upload->display_errors());
-
-                        $this->load->view('upload_form', $error);
-                }
-
-                $file = './images/poktan/'. $new_name ;
-				$newfile = './images/avatar/'. $new_name ;
-				if (!copy($file, $newfile)) {
-				    echo "failed to copy $file...\n";
-				}
-
-              
-
-  			$name 	= preg_replace('/[^A-Za-z0-9\-]/', '', $this->input->post('nama', TRUE));
-            $slug 	= strtolower($name);
-            $password = "12345678";
-            $newsletter = $this->input->post('newsletter');
-            $terms 	= $this->input->post('terms');
-            $this->load->helper('captcha');
-            $userCaptcha = $this->input->post('userCaptcha');
-
-        
-				$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
-				$passwordins = hash('sha256', $password . $salt); 
-				for($round = 0; $round < 65536; $round++){ $passwordins = hash('sha256', $passwordins . $salt); }
-		
-                $datains['user_name'] = $name;
-                $datains['user_slug'] = $slug;
-                $datains['user_pass'] = $passwordins;
-				$datains['user_salt'] = $salt;
-                $datains['user_date'] =$this->input->post('tanggal');
-              	$result = $this->user_model->insert_user($datains);
-                $this->db->set(array('user_avatar'=>$new_name,'user_level'=>'0',"kecamatan"=> $this->session->userdata('kecamatan'),"desa"=> $this->session->userdata('desa'),'user_slug'=>$slug.".".$result));
-				$this->db->where('user_id', $result);
-				$this->db->update('users');
-				$tanggal =  $this->input->post('tanggal');
-				$tanggal2 =  explode('-', $tanggal);
-				$tahun = $tanggal2[0];
-				$kecamatan  = $this->session->userdata('kecamatan');
-				$desa 		=  $this->session->userdata('desa');
-				$gapoktan = $this->admin_model->gapoktan_id;
-                $masukan =  array(
-                	'id_user'=>	$result ,
-                	'desa'=>$desa,
-                	'kecamatan'=>$kecamatan,
-                	'gapoktan'=>$gapoktan,
-                	'url'=>$slug.".".$result,
-                	'nama'=>$name,
-                	'foto'=>$new_name,
-                	'tahun_berdiri'=>$tahun,
-                	'sekertaris'=>$sekertaris,
-                	'ketua'=>$ketua,
-                	'bendahara'=>$bendahara,
-                	'pola1'=>$pola1,
-                	'pola2'=>$pola2,
-                	'pola3'=>$pola3,
-                	'tanggal'=>$tanggal
-                );
-
-         
-         
-		$this->db->insert('kelompok_tani', $masukan); 
-		$sel['header'] = "Penambahan Berhasil";
-		$yeay = array('user_name' =>$slug.".".$result,'password'=>12345678,'nama'=>$name);
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-        $this->load->view('admin/tambah_berhasil',$yeay);
-        $this->load->view('layout/footer');
-	}
-
 
 	function tambah_sungai() {
 		$sel['sel'] = "users";
@@ -1459,100 +1279,6 @@ private $user_id = "";
         $this->load->view('admin/footer');
 	}
 	*/
-
-	function tambah_gapoktan() {
-		$sel['sel'] = "users";
-		$sel['header'] = "Tambah Poktan";
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-        $this->load->view('admin/gapoktanadd');
-        $this->load->view('layout/footer');
-	}
-
-    public function tambah_gapoktan_proses() 
-	{
-			$ketua 	= $this->input->post('ketua');
-			$bendahara 	= $this->input->post('bendahara');
-			$sekertaris	= $this->input->post('sekertaris');
-		
-			$config['upload_path']          = './images/poktan/';
-                $config['allowed_types']        = 'gif|jpg|png';
-                $config['max_size']             = 10000;
-                $config['max_width']            = 1024;
-                $config['max_height']           = 47680;
-                $new_name = time()."_".$_FILES["foto"]['name'];
-				$config['file_name'] = $new_name;
-                $this->load->library('upload', $config);
-
-                if ( ! $this->upload->do_upload('foto'))
-                {
-                        $error = array('error' => $this->upload->display_errors());
-
-                        $this->load->view('upload_form', $error);
-                }
-
-                $file = './images/poktan/'. $new_name ;
-				$newfile = './images/avatar/'. $new_name ;
-				if (!copy($file, $newfile)) {
-				    echo "failed to copy $file...\n";
-				}
-
-              
-
-  			$name 	= preg_replace('/[^A-Za-z0-9\-]/', '', $this->input->post('nama', TRUE));
-            $slug 	= strtolower($name);
-            $password = "12345678";
-            $newsletter = $this->input->post('newsletter');
-            $terms 	= $this->input->post('terms');
-            $this->load->helper('captcha');
-            $userCaptcha = $this->input->post('userCaptcha');
-
-        
-				$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
-				$passwordins = hash('sha256', $password . $salt); 
-				for($round = 0; $round < 65536; $round++){ $passwordins = hash('sha256', $passwordins . $salt); }
-		
-                $datains['user_name'] = $name;
-                $datains['user_slug'] = $slug;
-                $datains['user_pass'] = $passwordins;
-				$datains['user_salt'] = $salt;
-                $datains['user_date'] =$this->input->post('tanggal');
-              	$result = $this->user_model->insert_user($datains);
-                $this->db->set(array('user_avatar'=>$new_name,'user_level'=>'0',"kecamatan"=> $this->session->userdata('kecamatan'),"desa"=> $this->session->userdata('desa'),'user_slug'=>$slug.".".$result));
-				$this->db->where('user_id', $result);
-				$this->db->update('users');
-				$tanggal =  $this->input->post('tanggal');
-				$tanggal2 =  explode('-', $tanggal);
-				$tahun = $tanggal2[0];
-				$kecamatan  = $this->session->userdata('kecamatan');
-				$desa 		=  $this->session->userdata('desa');
-                $masukan =  array(
-                	'id_user'=>	$result ,
-                	'desa'=>$desa,
-                	'kecamatan'=>$kecamatan,
-                	'url'=>$slug.".".$result,
-                	'nama'=>$name,
-                	'foto'=>$new_name,
-                	'tahun_berdiri'=>$tahun,
-                	'sekertaris'=>$sekertaris,
-                	'ketua'=>$ketua,
-                	'bendahara'=>$bendahara,
-                	'tanggal'=>$tanggal
-                );
-
-         
-         
-		$this->db->insert('gapoktan', $masukan); 
-		$sel['header'] = "Penambahan Berhasil";
-		$yeay = array('user_name' =>$slug.".".$result,'password'=>12345678,'nama'=>$name);
-		$this->load->view('layout/header');
-        $this->load->view('layout/navigation', $sel);
-        $this->load->view('admin/tambah_berhasil',$yeay);
-        $this->load->view('layout/footer');
-	}
-
-
-
 
 
 	public function loadcategories()
@@ -2134,12 +1860,62 @@ public function remove_pengumuman($id)
 	function validatedatatutupan(){		
 		if ($_SERVER['SERVER_NAME'] == "labs.psilva.pt") return false;		
 		$i = $this->input->post('i');
-		$this->db->where(array("id"=>$i));
-		$this->db->update("tbl_tutupan", array('validated' => 1));
+		$data = $this->admin_model->get_specific_tutupan($i);
+		//redirect($data[0]['lokasi'], location);
+		$zip = new ZipArchive;
+		if ($zip->open($data[0]['lokasi']) === TRUE) {
+			$zip->extractTo('./proses/');
+			$zip->close();
+			echo 'ok';
+		} else {
+			echo 'failed';
+		}
+
+		print_r($data);
+
+
+
+
+		
+		//$this->db->where(array("id"=>$i));
+		//$this->db->update("tbl_tutupan", array('validated' => 1));
+	}
+	function olahdatatutupan($i){		
+		$data = $this->admin_model->get_specific_tutupan($i);
+		//redirect($data[0]['lokasi'], location);
+		$zip = new ZipArchive;
+		if ($zip->open($data[0]['lokasi']) === TRUE) {
+			mkdir('./proses/'.$data[0]['id']);
+			$zip->extractTo('./proses/'.$data[0]['id'].'/');
+			$zip->close();
+			$lokasi = './proses/'.$data[0]['id'];
+			
+			echo 'ok';
+		} else {
+			echo 'failed';
+		}
+		/*
+
+		if ($this->admin_model->unzip($data[0]['lokasi'],'./proses/'.$data[0]['id']) === TRUE) {
+			echo 'ok';
+		} else {
+			echo 'failed';
+		}
+		*/
+		print_r($data);
+
+
+
+
+		
+		//$this->db->where(array("id"=>$i));
+		//$this->db->update("tbl_tutupan", array('validated' => 1));
 	}
 	function removedatatutupan(){		
 		if ($_SERVER['SERVER_NAME'] == "labs.psilva.pt") return false;		
 		$i = $this->input->post('i');
+		$tutupan = $this->admin_model->get_specific_tutupan($i);
+		unlink($tutupan[0]['lokasi']);
 		$this->db->where(array("id"=>$i));
 		$this->db->delete("tbl_tutupan");
 	}
