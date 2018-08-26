@@ -1,6 +1,6 @@
 <div class="container header">
 <div class="pull-left row">
-<h1 class="page_title_text">Lokasi Pemantauan tutupan</h1>
+<h1 class="page_title_text">Data tutupan lahan</h1>
 </div>
 <a href="<?php echo site_url('admin/add_tutupan'); ?>" style="float:right;">
 	<br />
@@ -26,7 +26,8 @@
                                         <thead>
                                             <tr>
                                                 <th align="right" style="width:11%">Option</th>
-                                                <th>Tahun data</th>
+												<th>Tahun data</th>
+												<th>Lokasi</th>												
                                                 <th class="hidden-sd hidden-xs">Tanggal Peta</th>
 
                                             </tr>
@@ -50,7 +51,8 @@
 														}
 													?>
                                                 
-                                                    <td><?php echo $pub['tahun']; ?></td>											
+													<td><?php echo $pub['tahun']; ?></td>
+													<td><?php echo $pub['lokasi']; ?></td>											
                                                     <td class="hidden-sd hidden-xs"><?php echo $pub['tanggal']; ?></td>															
                                                 </tr>       
                                             <?php endforeach; ?>

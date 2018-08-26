@@ -239,11 +239,27 @@ class Admin_model extends CI_Model
 		$query = $this->db->get('tbl_tutupan');
 		return $query->result_array();
 	}
+
+
 	public function get_data_tutupan()
 	{
 		$query = $this->db->query("SELECT *, year(tanggal) tahun FROM `tbl_tutupan`");
 	    return $query->result_array(); 
 	}
+
+	function unzip($location,$new_location){
+		if(exec("unzip $location",$arr)){
+			mkdir($new_location);
+			for($i = 1;$i< count($arr);$i++){
+				$file = trim(preg_replace("~inflating: ~","",$arr[$i]));
+						copy($location."/".$file,$new_location."/".$file);
+						unlink($location."/".$file);
+				}
+			return true;
+		}
+		return false;      
+	}
+	 
 
 	function get_nama_wilayah($i) {
 		$this->db->where('kode', $i);

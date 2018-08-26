@@ -1,40 +1,14 @@
 ﻿# Aplikasi Pengolahan Data IKTL
-Aplikasi ini merupakan sistem pengolahan peta tutupan lahan dalam bentuk vektor dan raster. Peta vector dikumpulkan dalam bentuk zip, sedangkan citra satellit raster akan diunduh secara otomatis dari server USGS-NASA. 
+##
 
-## Persiapan pustaka dan aplikasi penunjang
-Dibutuhkan aplikasi pendukung dan pustaka tambahan dalam pengolahan data GIS. Adapun aplikasi dan pustaka yang dimaksud adalah:
-1. Python 2.7 atau 3.5
-```
-sudo apt install python-dev pyhon3-dev
-```
-2. gdal dan python-gdal
-```
-sudo add-apt-repository -y ppa:ubuntugis/ppa
-sudo apt update
-sudo apt upgrade # if you already have gdal 1.11 installed
-sudo apt install gdal-bin python-gdal python3-gdal
-```
-3. saga gis
-```
-sudo apt install saga
-```
-4. R-cran
-```
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-sudo add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/' # ubuntu 16.04
-sudo add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu trusty/' # ubuntu 14.04
-sudo apt updata
-sudo install r-base-dev
-```
-5. Pustaka python mysql
-```
-pip install MySQL-python
-sudo apt-get install python-mysqldb
-```
+Aplikasi Pengolahan data vector Tutupan lahan 
 
-## Proses pengolahan
-Tahap pengolahan dimulai dari persiapan data tutupan lahan terkini. Data peta tersebut harus disesuaikan dengan kebutuhan sistem. Adapun kriteria yang dimaksud meliputi: Proyeksi peta = WGS84:
-###
+1. Install osgeo
+> sudo add-apt-repository -y ppa:ubuntugis/ppa \n
+> sudo apt update \n
+> sudo apt upgrade # if you already have gdal 1.11 installed \n
+> sudo apt install gdal-bin python-gdal python3-gdal \n
+
 2. Script Select file by attribute and save to file.
 > ogr2ogr -f "ESRI Shapefile" -where "PL00_ID >= 2001 and PL00_ID <= 2006 or PL00_ID = 20041 or PL00_ID = 20051" Frs2000.shp PL2000.shp
 

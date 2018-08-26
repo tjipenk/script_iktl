@@ -18,9 +18,9 @@
                             <!--/ panel heading/header -->
                             <!-- panel body -->
                             <div class="panel-body">
-                            <?php // echo form_open_multipart('admin/add_tutupan_data');?>
+                            <?php echo form_open_multipart('admin/add_tutupan_data');?>
 
-                            <form id="editdata" class="form-horizontal form-bordered">  
+                           <!-- <form id="editdata" class="form-horizontal form-bordered">   -->
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Upload file peta</label>
                                         <div class="col-sm-9">
@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <!--/ END row -->
-
+<?php /*
                 <script>  
 
 
@@ -91,9 +91,9 @@ return false;
     });
   </script> 
 
-
+*/
                 
-
+?>
             </div>
             <!--/ END Template Container -->
 
