@@ -29,13 +29,29 @@ private $user_id = "";
     {
 		$sel['sel'] = "dashboard";
 		//$p = $this->input->post('p');
-		
-		//$data['sungai'] = $this->admin_model->get_ika();		
+		//$year = 2017;
+		$data['sungai'] = $this->admin_model->get_data_dashboard();		
 		
 		//print_r($data);
   		$this->load->view('layout/header');
         $this->load->view('layout/navigation', $sel);
-        //$this->load->view('admin/dashboard_ika', $data);
+        $this->load->view('admin/dashboard_iktl', $data);
+		
+        $this->load->view('layout/footer');
+	}
+
+	public function rekap_iktl()
+    {
+		$sel['sel'] = "rekap";
+		//$p = $this->input->post('p');
+		$year = $this->uri->segment('3');
+		if (isset($year)){$data['tahun'] = $year;} else {$data['tahun'] = date("Y");}
+		$data['sungai'] = $this->admin_model->get_rekap_iktl($year);		
+		
+		//print_r($data);
+  		$this->load->view('layout/header');
+        $this->load->view('layout/navigation', $sel);
+        $this->load->view('admin/rekap_iktl', $data);
 		
         $this->load->view('layout/footer');
     }

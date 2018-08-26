@@ -1,6 +1,7 @@
 <div class="container header">
 <div class="pull-left row">
-<h1 class="page_title_text">Data Pemantauan Sungai</h1>
+<h1 class="page_title_text">Data Indeks Kualitas Tutupan Lahan</h1>
+<h1 class="page_title_text">Tahun <?php echo $this->uri->segment('3'); ?></h1>
 </div>
 <?php /*
 <a href="<?php echo site_url('admin/add_data_sungai'); ?>" style="float:right;">
@@ -27,8 +28,12 @@
                                         <thead>
                                             <tr>
                                                 <th>Provinsi</th>
-                                               
-												<th>IKA</th>
+                                                <th>ITH</th>
+                                                <th>IKT</th>
+                                                <th>IPH</th>
+                                                <th>IKH</th>
+                                                <th>IKBA</th>
+												<th>IKTL</th>
                                                 
 
                                             </tr>
@@ -42,9 +47,14 @@
                                                         <?php foreach($sungai as $pub): ?>
 														
 
-                                                        <tr data-id="<?php echo $pub['id_prov']; ?>">
-                                                            <td><?php echo $pub['provinsi'];?></td>
+                                                        <tr data-id="<?php echo $pub['id']; ?>">
+                                                            <td><?php echo $this->admin_model->get_nama_wilayah($pub['id_prov'])[0]['nama'];?></td>
+                                                            <td><?php echo $pub['ith'];?></td>																											
+                                                            <td><?php echo $pub['ikt'];?></td>																											
+                                                            <td><?php echo $pub['iph'];?></td>																											
+                                                            <td><?php echo $pub['ikh'];?></td>																											
                                                             <td><?php echo $pub['ika'];?></td>																											
+                                                            <td><?php echo $pub['iktl'];?></td>																											
                                                         </tr>                                                        
                                                         
                                                         <?php endforeach; ?>

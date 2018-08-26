@@ -27,6 +27,14 @@
           <ul class="dropdown-menu">
                <li><a href="<?php echo base_url(); ?>admin/dashboard">Dashboard IKTL Nasional</a></li> 
                <li><a href="<?php echo base_url(); ?>admin/daftar_tutupan">Daftar Peta Tutupan Lahan</a></li> 
+               <li class="dropdown-submenu">
+                    <a class="rekap" data-toggle="dropdown-submenu" href="#">Rekap Data IKTL</a>
+                    <ul class="dropdown-menu">
+                    <li><a href="<?php echo base_url(); ?>admin/rekap_iktl/<?php echo date("Y",strtotime("-2 year"));?>"><?php echo date("Y",strtotime("-2 year"));?></a></li>
+                    <li><a href="<?php echo base_url(); ?>admin/rekap_iktl/<?php echo date("Y",strtotime("-1 year"));?>"><?php echo date("Y",strtotime("-1 year"));?></a></li>
+                    <li><a href="<?php echo base_url(); ?>admin/rekap_iktl/<?php echo date('Y');?>"><?php echo date('Y');?></a></li>
+                    </ul>
+                </li>
                </ul>
         </li>
 
@@ -103,3 +111,14 @@
     </div>
   </div>
 </nav>
+
+
+<script>
+$(document).ready(function(){
+  $('.dropdown-submenu a.rekap').on("click", function(e){
+    $(this).next('ul').toggle();
+    e.stopPropagation();
+    e.preventDefault();
+  });
+});
+</script>
